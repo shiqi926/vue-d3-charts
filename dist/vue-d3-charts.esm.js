@@ -782,6 +782,7 @@ const d3$2 = {
   scaleTime,
   timeParse,
   timeFormat,
+  min,
   max,
   extent,
   line,
@@ -975,7 +976,7 @@ class d3linechart extends d3chart {
 
   setScales() {
     // Calcule vertical scale
-    this.yScale.domain([0, d3$2.max(this.data, d => d.max)]).rangeRound([this.cfg.height, 0]); // Calcule horizontal scale
+    this.yScale.domain([d3$2.min(this.data, d => d.min), d3$2.max(this.data, d => d.max)]).rangeRound([this.cfg.height, 0]); // Calcule horizontal scale
 
     this.xScale.domain(d3$2.extent(this.data, d => d.jsdate)).rangeRound([0, this.cfg.width]);
 
@@ -1039,7 +1040,7 @@ class d3linechart extends d3chart {
       }).on('mouseout', _ => {
         this.tooltip.classed('active', false);
       }).on('mousemove', _ => {
-        this.tooltip.style('left', window.event['pageX'] - 28 + 'px').style('top', window.event['pageY'] - 40 + 'px');
+        this.tooltip.style('left', window.event['pageX']).style('top', window.event['pageY']);
       }); // Visible point
 
       gp.append('circle').attr('class', 'chart__point-visible chart__point-visible--linechart').attr('pointer-events', 'none');
